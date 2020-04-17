@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "Inde";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@(await Html.RenderComponentAsync<GDR.Componentes.Users>(RenderMode.ServerPrerendered))
+

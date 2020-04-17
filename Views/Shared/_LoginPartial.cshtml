@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+@inject SignInManager<User> SignInManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    using (Html.BeginForm("Logout", "Account", method: FormMethod.Post, new { @id = "form", @class = "navbar-right" }))
+    {
+    <ul class="nav navbar-nav navbar-right">
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                @Html.ActionLink("Perfis", "Index", "Roles", null, new { @class = "nav-link text-dark" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Usuários", "Index", "Usuarios", null, new { @class = "nav-link text-dark" })
+            </li>
+        }
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="javascript: document.getElementById('form').submit();">Logout</a>
+        </li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+        </li>
+    </ul>
+}
