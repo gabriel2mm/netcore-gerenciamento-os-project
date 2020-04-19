@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@{
+    ViewData["Title"] = "AddRole";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container">
+        <h3 class="display-3" stye="margin-bottom: 10px">Selecione um perfil</h3>
+
+        @if (ViewBag.roleError != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Ops</strong> @ViewBag.roleError
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @if (ViewBag.Id != null)
+            {
+                <input name="userId" type="hidden" value="@ViewBag.Id" />
+            }
+            <div class="form-group">
+                <label for="role">Selecione um perfil abaixo: </label>
+                <select name="role" id="role" class="form-control">
+                   
+                    @if (ViewBag.roles != null)
+                    {
+                        ViewBag.options = 0;
+                        foreach (IdentityRole role in ViewBag.roles)
+                        {
+                             ViewBag.options++;
+                            <option value="@role.Name ">@role.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        @Html.ActionLink("Cancelar", "UpdatePerfil", "User", new { id = @ViewBag.Id }, new { @class = "btn btn-light form-control", style = "margin-rigth: 5px" })
+                    </div>
+                    <div class="col">
+                        @if (ViewBag.options != null && ViewBag.options >= 1)
+                        {
+                            <button type="submit" class="btn btn-dark form-control" style="margin-left: 5px">Adicionar</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-dark form-control disabled" disabled style="margin-left: 5px">Adicionar</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>

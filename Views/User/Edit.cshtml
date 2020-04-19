@@ -1,23 +1,18 @@
-﻿@model GDR.Models.ModelsForViews.RegisterViewModel
+﻿@using  GDR.Models.ModelsForViews;
+@model User
 @{
-    ViewData["Title"] = "Registrar";
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div class="jumbotron">
-        <h1 class="display-4"> Adicionar usuário</h1>
+    <div class="container">
+        <div class="row">
+            <h1>Editar usuário</h1>
+        </div>
 
-        @if (ViewData != null && ViewData["error"] != null && !String.IsNullOrEmpty(ViewData["error"].ToString()))
+        @using (Html.BeginForm(FormMethod.Post))
         {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span>@ViewData["error"]</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        }
-
-        @using (Html.BeginForm("Register", "Account", method: FormMethod.Post))
-        {
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 @Html.LabelFor(model => model.First_Name)
                 @Html.TextBoxFor(model => model.First_Name, null, new { @class = "form-control" })
@@ -38,16 +33,6 @@
                 @Html.TextBoxFor(model => model.Login, null, new { @class = "form-control" })
                 <span class="text-danger">@Html.ValidationMessageFor(model => model.Login)</span>
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Password)
-                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-                <span class="text-danger">@Html.ValidationMessageFor(model => model.Password)</span>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.PasswordConfirm)
-                @Html.PasswordFor(model => model.PasswordConfirm, new { @class = "form-control" })
-                <span class="text-danger">@Html.ValidationMessageFor(model => model.PasswordConfirm)</span>
-            </div>
 
             <div class="form-group">
                 <div class="row">
@@ -55,10 +40,11 @@
                         @Html.ActionLink("Cancelar", "Index", "User", null, new { @class = "btn btn-light form-control", style = "margin-rigth: 5px" })
                     </div>
                     <div class="col">
-                        <button type="submit" class="btn btn-dark form-control" style="margin-left: 5px">Adicionar</button>
+                        <button type="submit" class="btn btn-dark form-control" style="margin-left: 5px">Salvar</button>
                     </div>
                 </div>
             </div>
         }
+
     </div>
 

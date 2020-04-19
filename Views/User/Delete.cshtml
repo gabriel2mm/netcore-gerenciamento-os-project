@@ -1,0 +1,21 @@
+﻿@model GDR.Models.User
+@{
+    ViewData["Title"] = "Excluir usuário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container">
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            @Html.HiddenFor(model => model.Id)
+            @Html.AntiForgeryToken()
+            <div class="alert alert-warning" role="alert">
+                <span><strong>Exluir usuário ? </strong>Tem certeza que deseja exluir o usuário : @Html.DisplayFor(model => model.First_Name) @Html.DisplayFor(model => model.Last_name) ?</span>
+                <div style="margin-top: 10px">
+                    @Html.ActionLink("Cancelar", "Index", "User", null, new { @class = "btn btn-light", style = "margin-rigth: 5px; width: 100px" })
+                    <button type="submit" class="btn btn-danger" style="width: 100px">Exluir</button>
+                </div>
+            </div>
+        }
+    </div>
+

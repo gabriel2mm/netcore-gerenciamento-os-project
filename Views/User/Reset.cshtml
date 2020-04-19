@@ -1,0 +1,51 @@
+﻿@model GDR.Models.ModelsForViews.ResetPassword
+@{
+    ViewData["Title"] = "Reset";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h3 class="display-3">Trocar senha</h3>
+
+    @if (ViewBag.resetError != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Ops!</strong> @ViewBag.resetError
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        <div class="form-group">
+            @Html.LabelFor(model => model.CurrentPassword)
+            @Html.PasswordFor(model => model.CurrentPassword, new { @class = "form-control" })
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.CurrentPassword)</span>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password)
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.Password)</span>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PasswordConfirm)
+            @Html.PasswordFor(model => model.PasswordConfirm, new { @class = "form-control" })
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.PasswordConfirm)</span>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                @Html.ActionLink("Cancelar", "Index", "User", null, new { @class = "btn btn-light form-control", style = "margin-rigth: 5px" })
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-dark form-control" style="margin-left: 5px">Trocar senha</button>
+            </div>
+        </div>
+    }
+</div>
+

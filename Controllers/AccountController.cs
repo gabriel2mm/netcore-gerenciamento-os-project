@@ -20,6 +20,11 @@ namespace GDR.Controllers
             _signInManager = signInManager;
         }
 
+        public IActionResult Index()
+        {
+            return RedirectToAction(nameof(Login));
+        }
+
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
@@ -59,7 +64,7 @@ namespace GDR.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles="Admin")]
         [HttpGet]
         public IActionResult Register()
         {
@@ -67,7 +72,7 @@ namespace GDR.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -96,6 +101,12 @@ namespace GDR.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+
+        public ActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
