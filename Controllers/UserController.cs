@@ -41,10 +41,8 @@ namespace GDR.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(User user)
         {
-
             if (ModelState.IsValid)
             {
-
                 User u = await _userManager.FindByIdAsync(user.Id);
                 u.First_Name = user.First_Name;
                 u.Last_name = user.Last_name;
@@ -116,15 +114,12 @@ namespace GDR.Controllers
                     {
                         return RedirectToAction("Index", "Home", null);
                     }
-                    
                 }
                 else
                 {
                     ViewBag.resetError = "Não foi possível trocar a senha, tente novamente!";
                 }
-
             }
-
             return View(resetPassword);
         }
 
@@ -157,6 +152,16 @@ namespace GDR.Controllers
             ViewBag.Id = id;
             ViewBag.roles = rolesByUser;
             return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> newRole(String name)
+        {
+            IdentityRole role = new IdentityRole();
+            role.Name = name;
+            role.NormalizedName = name.ToUpperInvariant();
+            await _roleManager.CreateAsync(role);
+            return RedirectToAction("index");
         }
 
         [HttpPost]

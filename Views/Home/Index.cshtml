@@ -2,6 +2,44 @@
     ViewData["Title"] = "Solicitações";
 }
 
+<style>
+    .nav-item{
+        margin: 5px;
+    }
+
+</style>
+
 <div class="container">
-    <h3 class="display-3">Solicitações</h3>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <h5 class="card-header">Controles</h5>
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        @await Html.PartialAsync("~/Views/Fragments/ActionsByUsers.cshtml")
+                        <li class="nav-item">
+                            <a class="btn btn-secondary" id="solicitacoes-tab" data-toggle="pill" href="#solicitacoes" role="tab" aria-controls="solicitacoes" aria-selected="true">Minhas Solicitações</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-secondary" id="requisicoes-tab" data-toggle="pill" href="#requisicoes" role="tab" aria-controls="requisicoes" aria-selected="false">Minhas Requisições</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-top: 30px">
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="solicitacoes" role="tabpanel" aria-labelledby="solicitacoes-tab">
+            <h3 class="display-3">Solicitações</h3>
+            <div class="row">
+                @await Html.PartialAsync("~/Views/Fragments/OrderTable.cshtml")
+            </div>
+        </div>
+        <div class="tab-pane fade" id="requisicoes" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <h3 class="display-3">Requisições</h3>
+        </div>
+    </div>
 </div>

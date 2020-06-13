@@ -40,7 +40,9 @@ namespace GDR
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContextPool<ContextDb>(options => options.UseSqlServer(Configuration.GetConnectionString("dbConn")));
             services.AddControllersWithViews();
-            services.AddScoped<IRepository<User>, Repository<User>>();
+            services.AddScoped<IRepository<User>, UserRepository> ();
+            services.AddScoped<IRepository<Order>, OrderRepository>();
+            services.AddScoped<IRepository<Request>, RequestRepository>();
             services.AddSession();
             services.AddMemoryCache();
         }

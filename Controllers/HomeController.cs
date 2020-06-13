@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using GDR.Models;
 using Microsoft.AspNetCore.Authorization;
+using GDR.Repository;
 
 namespace GDR.Controllers
 {
@@ -14,10 +15,14 @@ namespace GDR.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly OrderRepository _orderRepository;
+        private readonly RequestRepository _requestRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, OrderRepository orderRepository, RequestRepository requestRepository)
         {
             _logger = logger;
+            _orderRepository = orderRepository;
+            _requestRepository = requestRepository;
         }
 
         public IActionResult Index()

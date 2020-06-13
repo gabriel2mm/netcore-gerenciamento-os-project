@@ -12,6 +12,10 @@ namespace GDR.Context
     {
         public ContextDb(DbContextOptions options) : base(options) { }
 
-        public virtual DbSet<User> users { get; set; }
+        public virtual DbSet<User> User { get; set; }
+
+        public virtual DbSet<Order> Order { get; set; }
+
+        public virtual DbSet<Request> Request { get; set; }
     }
 }
