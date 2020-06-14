@@ -1,16 +1,20 @@
 ﻿using GDR.Context;
 using GDR.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace GDR.Repository
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEntity : class
     {
+        private bool isDisposed;
         private readonly ContextDb _context;
+
         public Repository(ContextDb context)
         {
             _context = context;
@@ -36,14 +40,14 @@ namespace GDR.Repository
             _context.Entry(obj).State = EntityState.Modified;
         }
 
-        public virtual async void SaveAll()
+        public virtual void SaveAll()
         {
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public virtual async void Add(TEntity obj)
+        public virtual void Add(TEntity obj)
         {
-            await _context.Set<TEntity>().AddAsync(obj);
+            _context.Set<TEntity>().Add(obj);
         }
 
         public virtual void Delete(Func<TEntity, bool> predicate)
@@ -51,6 +55,30 @@ namespace GDR.Repository
             _context.Set<TEntity>()
                 .Where(predicate).ToList()
                 .ForEach(del => _context.Set<TEntity>().Remove(del));
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                _context.Dispose();
+                GC.Collect();
+            }
+
+            isDisposed = true;
+        }
+
+        ~Repository()
+        {
+            Dispose(false);
         }
     }
 }

@@ -1,0 +1,35 @@
+﻿@using GDR.Models;
+<table class="table table-hover table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Usuário tratando</th>
+            <th>Status</th>
+            <th>Tipo</th>
+            <th>Aprovado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.requests != null && ((List<Request>) ViewBag.requests).Count > 0)
+        {
+            foreach (Request r in ViewBag.requests)
+            {
+                <tr>
+                    <td>@r.Id</td>
+                    <td>@r.Description</td>
+                    <td>@r.User.First_Name @r.User.Last_name</td>
+                    <td>@r.Status</td>
+                    <td>@r.Type</td>
+                    <td>@(r.Approval == false ? "Não aprovado" : "Aprovado") </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td class="text-center" colspan="6">Não exite registros</td>
+            </tr>
+        }
+    </tbody>
+</table>

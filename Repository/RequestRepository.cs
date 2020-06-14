@@ -1,18 +1,21 @@
 ﻿using GDR.Context;
 using GDR.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GDR.Repository
 {
     public class RequestRepository : Repository<Request>
     {
-        private readonly ContextDb _context;
+        protected ContextDb _context;
         public RequestRepository(ContextDb context) : base(context)
         {
             _context = context;
+        }
+
+        public override IQueryable<Request> GetAll()
+        {
+            return _context.Request.Include("User").AsQueryable();
         }
     }
 }

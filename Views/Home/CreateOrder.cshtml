@@ -1,0 +1,47 @@
+﻿@using GDR.Models.ModelsForViews;
+@model OrderViewModel
+@{
+    ViewData["Title"] = "Criar Solicitação";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="row">
+            <h1>Criar Solicitação</h1>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.User) : @Html.DisplayTextFor(model => model.User)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Request)
+                <select name="Request" id="Request" class="form-control" asp-items="ViewBag.requests"></select>
+                <span class="text-danger">@Html.ValidationMessageFor(model => model.Request)</span>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Attachment)
+                @Html.TextBoxFor(model => model.Attachment, "", new { @class = "form-control", @type = "file" })
+                <span class="text-danger">@Html.ValidationMessageFor(model => model.Attachment)</span>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description)
+                @Html.TextAreaFor(model => model.Description, 30, 30, new { @class = "form-control" })
+                <span class="text-danger">@Html.ValidationMessageFor(model => model.Description)</span>
+            </div>
+
+            <button class="btn btn-success" type="submit">Criar solicitação</button>
+        }
+
+    </div>
+</div>
+

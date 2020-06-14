@@ -1,13 +1,31 @@
-﻿<table class="table table-hover table-bordered">
+﻿@using GDR.Models;
+<table class="table table-hover table-bordered">
     <thead class="thead-dark">
         <tr>
             <th>Código</th>
-            <th>Código</th>
+            <th>Descrição</th>
+            <th>Autor</th>
+            <th>Criação</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="text-center"></td>
-        </tr>
+        @if (ViewBag.orders != null && ((List<Order>) ViewBag.orders).Count > 0)
+        {
+            foreach (Order o in ViewBag.orders)
+            {
+                <tr>
+                    <td>@o.Id</td>
+                    <td>@o.Description</td>
+                    <td>@o.User.First_Name @o.User.Last_name</td>
+                    <td>@o.Created.ToString("dd/mm/yyyy hh:ii:ss")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td class="text-center" colspan="4">Não exite registros</td>
+            </tr>
+        }
     </tbody>
 </table>

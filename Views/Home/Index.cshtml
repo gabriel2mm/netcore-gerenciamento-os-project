@@ -3,10 +3,9 @@
 }
 
 <style>
-    .nav-item{
+    .nav-item {
         margin: 5px;
     }
-
 </style>
 
 <div class="container">
@@ -35,11 +34,16 @@
         <div class="tab-pane fade show active" id="solicitacoes" role="tabpanel" aria-labelledby="solicitacoes-tab">
             <h3 class="display-3">Solicitações</h3>
             <div class="row">
-                @await Html.PartialAsync("~/Views/Fragments/OrderTable.cshtml")
+
             </div>
         </div>
         <div class="tab-pane fade" id="requisicoes" role="tabpanel" aria-labelledby="pills-profile-tab">
-            <h3 class="display-3">Requisições</h3>
+            <div class="jumbotron">
+                <h5 class="display-3">Requisições</h5>
+                <div class="row">
+                    @await Html.PartialAsync("~/Views/Fragments/RequestTable.cshtml")
+                </div>
+            </div>
         </div>
     </div>
 </div>

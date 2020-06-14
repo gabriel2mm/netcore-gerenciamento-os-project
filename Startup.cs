@@ -33,16 +33,19 @@ namespace GDR
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddServerSideBlazor();
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ContextDb>()
-                .AddDefaultTokenProviders();
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddDbContextPool<ContextDb>(options => options.UseSqlServer(Configuration.GetConnectionString("dbConn")));
             services.AddControllersWithViews();
-            services.AddScoped<IRepository<User>, UserRepository> ();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDbContext<ContextDb>(options => options.UseSqlServer(Configuration.GetConnectionString("dbConn")));       
+
+            services.AddIdentity<User, IdentityRole>()
+             .AddEntityFrameworkStores<ContextDb>()
+             .AddDefaultTokenProviders();
+
+            services.AddTransient(typeof(ContextDb));
+            services.AddScoped<IRepository<User>, UserRepository>();
             services.AddScoped<IRepository<Order>, OrderRepository>();
             services.AddScoped<IRepository<Request>, RequestRepository>();
+
             services.AddSession();
             services.AddMemoryCache();
         }

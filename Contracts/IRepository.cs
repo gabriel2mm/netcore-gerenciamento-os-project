@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace GDR.Contracts
 {
     public interface IRepository<TEntity> where TEntity : class
-    {
+    { 
         IQueryable<TEntity> GetAll();
         IQueryable<TEntity> Get(Func<TEntity, bool> predicate);
         TEntity Find(params object[] key);

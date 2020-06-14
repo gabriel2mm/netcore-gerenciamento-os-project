@@ -65,7 +65,7 @@ namespace GDR.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Equipament")
+                        .HasColumnName("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DescriptionDeclineApproval")
@@ -85,7 +85,6 @@ namespace GDR.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -343,9 +342,7 @@ namespace GDR.Migrations
                 {
                     b.HasOne("GDR.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

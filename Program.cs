@@ -21,6 +21,7 @@ namespace GDR
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }
+        );
     }
 }

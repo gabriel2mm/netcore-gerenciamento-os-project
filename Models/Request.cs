@@ -16,12 +16,10 @@ namespace GDR.Models
 
         [Column("Users")]
         [Display(Name = "Usuários")]
-        [Required(ErrorMessage = "O campo usuário é necessário")]
         public User User { get; set; }
 
         [Column("Status")]
         [Display(Name = "Status")]
-        [Required(ErrorMessage = "O campo Status é necessário")]
         public Status Status { get; set; }
         
         [Column("Types")]
@@ -34,9 +32,9 @@ namespace GDR.Models
         [Required(ErrorMessage = "O campo Equipamento é necessário")]
         public String Equipament { get; set; }
 
-        [Column("Equipament")]
-        [Display(Name = "Equipamentos")]
-        [Required(ErrorMessage = "O campo Equipamento é necessário")]
+        [Column("Description")]
+        [Display(Name = "Descrição")]
+        [Required(ErrorMessage = "O campo Descrição é necessário")]
         public String Description { get; set; }
 
         [DefaultValue(false)]

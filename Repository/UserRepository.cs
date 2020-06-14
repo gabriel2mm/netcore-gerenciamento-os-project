@@ -14,6 +14,6 @@ namespace GDR.Repository
         public UserRepository(ContextDb context) : base(context)
         {
             _context = context;
-        }
+        }  
     }
 }
