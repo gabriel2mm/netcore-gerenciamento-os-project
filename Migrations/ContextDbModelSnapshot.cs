@@ -15,7 +15,7 @@ namespace GDR.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -28,20 +28,19 @@ namespace GDR.Migrations
                     b.Property<string>("Attachment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnName("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Queue")
+                        .HasColumnName("Queue")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("RequestId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -71,14 +70,26 @@ namespace GDR.Migrations
                     b.Property<string>("DescriptionDeclineApproval")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DescriptionsSupport")
+                        .HasColumnName("DescriptionSupport")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Equipament")
                         .IsRequired()
                         .HasColumnName("Equipament")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Scheduling")
+                        .HasColumnName("Scheduling")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Status")
                         .HasColumnName("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("TechnicianDescription")
+                        .HasColumnName("TechnicianDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
                         .HasColumnName("Types")
@@ -86,6 +97,10 @@ namespace GDR.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isDptoPayment")
+                        .HasColumnName("DPTOPayment")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -333,9 +348,7 @@ namespace GDR.Migrations
 
                     b.HasOne("GDR.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("GDR.Models.Request", b =>

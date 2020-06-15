@@ -12,6 +12,7 @@ namespace GDR.Enumerators
         Tecnico = 2,
         Triagem = 3,
         DtoPagamentos = 4,
-        Suporte = 5
+        Suporte = 5,
+        Atualizado = 6
     }
 }

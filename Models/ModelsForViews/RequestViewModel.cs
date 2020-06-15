@@ -10,6 +10,8 @@ namespace GDR.Models.ModelsForViews
 {
     public class RequestViewModel
     {
+        public Guid Id { get; set; }
+
         [Display(Name = "Usuários")]
         public String UserId { get; set; }
 

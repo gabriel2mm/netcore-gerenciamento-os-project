@@ -8,20 +8,35 @@
             <th>Status</th>
             <th>Tipo</th>
             <th>Aprovado</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        @if (ViewBag.requests != null && ((List<Request>) ViewBag.requests).Count > 0)
+        @if (ViewBag.requests != null && ((List<Request>)ViewBag.requests).Count > 0)
         {
             foreach (Request r in ViewBag.requests)
             {
                 <tr>
-                    <td>@r.Id</td>
-                    <td>@r.Description</td>
-                    <td>@r.User.First_Name @r.User.Last_name</td>
-                    <td>@r.Status</td>
-                    <td>@r.Type</td>
-                    <td>@(r.Approval == false ? "Não aprovado" : "Aprovado") </td>
+                    <td class="text-center">@r.Id</td>
+                    <td class="text-center">@r.Description</td>
+                    <td class="text-center">@r.User.First_Name @r.User.Last_name</td>
+                    <td class="text-center">@r.Status</td>
+                    <td class="text-center">@r.Type</td>
+                    <td class="text-center">@(r.Approval == false ? "Não aprovado" : "Aprovado") </td>
+                    <td class="text-center">
+                        @Html.ActionLink("Visualizar", "ViewRequest", "Request", new { id = r.Id }, new { @class = "btn btn-primary" })
+                        @if (User.IsInRole("Usuario"))
+                        {
+                            if (r.Status == GDR.Enumerators.Status.Aberto)
+                            {
+                                @Html.ActionLink("Editar", "EditRequest", "Request", new { id = r.Id }, new { @class = "btn btn-primary" })
+                            }
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Editar", "EditRequest", "Request", new { id = r.Id }, new { @class = "btn btn-primary" })
+                        }
+                    </td>
                 </tr>
             }
         }

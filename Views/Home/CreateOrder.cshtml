@@ -4,8 +4,6 @@
     ViewData["Title"] = "Criar Solicitação";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
 <div class="container">
     <div class="jumbotron">
         <div class="row">
@@ -23,7 +21,22 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.Request)
-                <select name="Request" id="Request" class="form-control" asp-items="ViewBag.requests"></select>
+                @{
+                    SelectList requests = null;
+                    if (ViewBag.requests != null && ((List<Request>)ViewBag.requests).Count > 0)
+                    {
+                        requests = new SelectList(ViewBag.requests, "Id", "Description");
+                    }
+
+                }
+                @if (ViewBag.requests != null && ((List<Request>)ViewBag.requests).Count > 0)
+                {
+                    <select class="form-control" asp-items="requests" name="Request"></select>
+                }
+                else
+                {
+                    <label>Necessário criar uma requisição válida primeiro</label>
+                }
                 <span class="text-danger">@Html.ValidationMessageFor(model => model.Request)</span>
             </div>
 
@@ -35,13 +48,20 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.Description)
-                @Html.TextAreaFor(model => model.Description, 30, 30, new { @class = "form-control" })
+                @Html.TextAreaFor(model => model.Description, 5, 5, new { @class = "form-control" })
                 <span class="text-danger">@Html.ValidationMessageFor(model => model.Description)</span>
             </div>
 
-            <button class="btn btn-success" type="submit">Criar solicitação</button>
+            <div class="row">
+                <div class="col-6">
+                    @Html.ActionLink("Voltar", "Index", "Home", null , new { @class ="btn btn-secondary form-control"})
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-success form-control" type="submit">Criar solicitação</button>
+                </div>
+            </div>
+            
         }
-
     </div>
 </div>
 

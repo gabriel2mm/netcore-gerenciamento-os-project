@@ -1,10 +1,13 @@
 ﻿@if (User.IsInRole("Usuario"))
 {
     <li class="nav-item">
-        @Html.ActionLink("Criar Solicitação", "CreateOrder", "Home", null, new { @class="btn btn-secondary" })
+        @Html.ActionLink("Criar Solicitação", "CreateOrder", "Home", null, new { @class = "btn btn-secondary" })
     </li>
     <li class="nav-item">
         @Html.ActionLink("Criar Requisição", "CreateRequest", "Home", null, new { @class = "btn btn-secondary" })
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-secondary" id="requisicoes-tab" data-toggle="pill" href="#requisicoes" role="tab" aria-controls="requisicoes" aria-selected="false">Minhas Requisições</a>
     </li>
 }
 

@@ -12,6 +12,7 @@ using GDR.Contracts;
 using GDR.Models.ModelsForViews;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using GDR.Enumerators;
 
 namespace GDR.Controllers
 {
@@ -31,21 +32,47 @@ namespace GDR.Controllers
             _requestRepository = requestRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewBag.orders = _orderRepository.GetAll().ToList();
-            ViewBag.requests = _requestRepository.GetAll().ToList();
+            User connected = await _userManager.GetUserAsync(User);
+
+            if (User.IsInRole("Usuario"))
+            {
+                ViewBag.orders = _orderRepository.Get((o => o.User.Login == connected.Login)).ToList();
+                ViewBag.requests = _requestRepository.Get(((r => r.Status == Status.Aberto || r.Status == Status.Atualizado))).ToList();
+            }
+            else if (User.IsInRole("Triagem"))
+            {
+                ViewBag.orders = _orderRepository.Get((o => o.Queue == Queue.Triagem)).ToList();
+                ViewBag.requests = _requestRepository.Get((r => r.Status == Status.Triagem)).ToList();
+            }
+            else if (User.IsInRole("DPTO Pagamento"))
+            {
+                ViewBag.orders = _orderRepository.Get((o => o.Queue == Queue.DtoPagamento)).ToList();
+                ViewBag.requests = _requestRepository.Get((r => r.Status == Status.DtoPagamentos)).ToList();
+            }
+            else if (User.IsInRole("Nivel 2"))
+            {
+                ViewBag.orders = _orderRepository.Get((o => o.Queue == Queue.nivel2)).ToList();
+                ViewBag.requests = _requestRepository.Get((r => r.Status == Status.Suporte)).ToList();
+            }
+            else if (User.IsInRole("Tecnico"))
+            {
+                ViewBag.orders = _orderRepository.Get((o => o.Queue == Queue.Tecnico)).ToList();
+                ViewBag.requests = _requestRepository.Get((r => r.Status == Status.Tecnico)).ToList();
+            }
 
             return View();
         }
-       
-        public async  Task<IActionResult> CreateOrder()
+
+        public async Task<IActionResult> CreateOrder()
         {
             OrderViewModel view = new OrderViewModel();
-            User user = await _userManager.GetUserAsync(User);
-            view.User = user.Id;
 
-            ViewBag.requests = _requestRepository.GetAll().ToList();
+            User connected = await _userManager.GetUserAsync(User);
+            view.User = connected;
+
+            ViewBag.requests = _requestRepository.Get((r => r.User.Login == connected.Login && (r.Status == Status.Aberto || r.Status == Status.Atualizado))).ToList();
 
             return View(view);
         }
@@ -54,17 +81,20 @@ namespace GDR.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateOrder(OrderViewModel order)
         {
+
+            User user = await _userManager.GetUserAsync(User);
             if (!ModelState.IsValid)
             {
-                return View();
+                ViewBag.requests = _requestRepository.Get((r => r.User.Login == user.Login && (r.Status == Status.Aberto || r.Status == Status.Atualizado))).ToList();
+                return View(order);
             }
-
+            
             Order o = new Order();
+            o.Queue = Queue.Requisitante;
             o.Id = Guid.NewGuid();
             o.Description = order.Description;
-            o.Created = new DateTime();
-            o.User = await _userManager.FindByIdAsync(order.User);
-            //o.Request = _requestRepository.Get((r => r.Id.Equals(order.Request))).FirstOrDefault();
+            o.User = await _userManager.GetUserAsync(User);
+            o.Request = _requestRepository.Find(Guid.Parse(order.Request));
 
             _orderRepository.Add(o);
             _orderRepository.SaveAll();
@@ -84,7 +114,6 @@ namespace GDR.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRequest(RequestViewModel request)
         {
-          
             try
             {
                 if (!ModelState.IsValid)
@@ -109,12 +138,12 @@ namespace GDR.Controllers
                 _requestRepository.SaveAll();
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(String.Format("Não foi possível criar requisição [ %s ]", e.Message));
             }
 
-            return RedirectToAction(nameof(Index));            
+            return RedirectToAction(nameof(Index));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

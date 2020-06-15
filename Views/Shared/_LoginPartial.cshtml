@@ -2,12 +2,20 @@
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
 
 @inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
 
 @if (SignInManager.IsSignedIn(User))
 {
     using (Html.BeginForm("Logout", "Account", method: FormMethod.Post, new { @id = "form", @class = "navbar-right" }))
     {
     <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+            @{
+                User user = await UserManager.GetUserAsync(User);
+            }
+            <a class="nav-link text-dark">@user.First_Name @user.Last_name</a>
+        </li>
         <li class="nav-item">
             @Html.ActionLink("Solicitações", "Index", "Home", null, new { @class = "nav-link text-dark" })
         </li>

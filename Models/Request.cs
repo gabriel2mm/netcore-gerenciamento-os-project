@@ -12,6 +12,7 @@ namespace GDR.Models
     public class Request
     {
         [Key]
+        [Display(Name="Número da Requisição")]
         public Guid Id { get; set; }
 
         [Column("Users")]
@@ -38,10 +39,26 @@ namespace GDR.Models
         public String Description { get; set; }
 
         [DefaultValue(false)]
+        [Column("DPTOPayment")]
+        public bool isDptoPayment { get; set; }
+
+        [DefaultValue(false)]
         [Column("Approval")]
         [Display(Name = "Aprovação")]
         public bool Approval { get; set; }
 
+        [Display(Name = "Descrição de não aprovação")]
         public String DescriptionDeclineApproval { get; set; }
+
+        [Column("DescriptionSupport")]
+        [Display(Name = "Descrição do Suporte")]
+        public String DescriptionsSupport { get; set; }
+
+        [Column("TechnicianDescription")]
+        [Display(Name = "Descrição do Técnico")]
+        public String TechnicianDescription { get; set; }
+
+        [Column("Scheduling")]
+        public DateTime Scheduling { get; set; }
     }
 }

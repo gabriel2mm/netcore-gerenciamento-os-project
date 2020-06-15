@@ -15,16 +15,16 @@ namespace GDR.Models
 
         [Column("Users")]
         [Display(Name = "Usuários")]
-        [Required(ErrorMessage = "O campo usuário é necessário")]
         public User User { get; set; }
 
         [Column("Description")]
         [Display(Name = "Descrição")]
         [Required(ErrorMessage = "O campo Descrição é necessário")]
         public String Description { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime Created { get; set; }
+        
+        [Column("Queue")]
+        [Display(Name = "Fila")]
+        public GDR.Enumerators.Queue Queue { get; set; }
 
         [Column("Request")]
         [Display(Name = "Requisição")]

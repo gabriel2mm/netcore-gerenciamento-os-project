@@ -26,7 +26,7 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.Type)
-                @Html.DropDownListFor(model => model.Type, Html.GetEnumSelectList<Types>(), null, new { @class ="form-control"})
+                @Html.DropDownListFor(model => model.Type, Html.GetEnumSelectList<Types>(), null, new { @class = "form-control" })
                 <span class="text-danger">@Html.ValidationMessageFor(model => model.Type)</span>
             </div>
 
@@ -42,7 +42,16 @@
                 <span class="text-danger">@Html.ValidationMessageFor(model => model.Description)</span>
             </div>
 
-            <button type="submit" class="btn btn-success">Criar Requisição</button>
+
+            <div class="row">
+                <div class="col-6">
+                    @Html.ActionLink("Voltar", "Index", "Home", null, new { @class = "btn btn-secondary form-control" })
+                </div>
+                <div class="col-6">
+                    <button type="submit" class="btn btn-success form-control">Criar Requisição</button>
+                </div>
+            </div>
+            
         }
 
     </div>

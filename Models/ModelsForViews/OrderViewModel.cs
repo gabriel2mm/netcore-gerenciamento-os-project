@@ -10,8 +10,7 @@ namespace GDR.Models.ModelsForViews
     public class OrderViewModel
     {
         [Display(Name = "Usuário")]
-        [Required(ErrorMessage = "O campo usuário é necessário")]
-        public String User { get; set; }
+        public User User { get; set; }
 
         [Display(Name = "Descrição")]
         [Required(ErrorMessage = "O campo descrição é necessário")]
@@ -19,7 +18,6 @@ namespace GDR.Models.ModelsForViews
         public DateTime Created { get; set; }
 
         [Display(Name = "Requisição")]
-        [Required(ErrorMessage = "O campo usuário é necessário")]
         public String Request { get; set; }
 
         [Display(Name = "Anexo")]

@@ -5,11 +5,14 @@
             <th>Código</th>
             <th>Descrição</th>
             <th>Autor</th>
-            <th>Criação</th>
+            <th>Fila</th>
+            <th>Status</th>
+            <th>Aprovado ?</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        @if (ViewBag.orders != null && ((List<Order>) ViewBag.orders).Count > 0)
+        @if (ViewBag.orders != null && ((List<Order>)ViewBag.orders).Count > 0)
         {
             foreach (Order o in ViewBag.orders)
             {
@@ -17,14 +20,19 @@
                     <td>@o.Id</td>
                     <td>@o.Description</td>
                     <td>@o.User.First_Name @o.User.Last_name</td>
-                    <td>@o.Created.ToString("dd/mm/yyyy hh:ii:ss")</td>
+                    <td>@o.Queue</td>
+                    <td>@o.Request.Status</td>
+                    <td>@(o.Request.Approval == false ?  "Recusado" : "Aprovado")</td>
+                    <td class="text-center justify-content-center">
+                        @Html.ActionLink("Visualizar", "ViewOrder", "Order", new { @id = o.Id }, new { @class = "btn btn-primary" })
+                    </td>
                 </tr>
             }
         }
         else
         {
             <tr>
-                <td class="text-center" colspan="4">Não exite registros</td>
+                <td class="text-center" colspan="7">Não exite registros</td>
             </tr>
         }
     </tbody>

@@ -1,0 +1,68 @@
+﻿@model Request
+@{
+    ViewData["Title"] = "ViewRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="row">
+            <h5>Requisição</h5>
+        </div>
+
+        <div class="form-group">
+            <label for="id">Código da requisição</label>
+            @Html.DisplayFor(model => model.Id)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.User):
+            @Html.DisplayFor(model => model.User.First_Name) @Html.DisplayFor(model => model.User.Last_name)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Type):
+            @Html.DisplayFor(model => model.Type)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status):
+            @Html.DisplayFor(model => model.Status)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Equipament):
+            @Html.DisplayFor(model => model.Equipament)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description):
+            @Html.DisplayFor(model => model.Description)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Approval):
+            @Html.DisplayFor(model => model.Approval)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DescriptionDeclineApproval):
+            @Html.DisplayFor(model => model.DescriptionDeclineApproval)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TechnicianDescription):
+            @Html.DisplayFor(model => model.TechnicianDescription)
+        </div>
+
+        @if (!User.IsInRole("Usuario"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.DescriptionsSupport):
+                @Html.DisplayFor(model => model.DescriptionsSupport)
+            </div>
+        }
+
+        @Html.ActionLink("Voltar", "Index", "Home", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>

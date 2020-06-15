@@ -17,5 +17,15 @@ namespace GDR.Repository
         {
             return _context.Request.Include("User").AsQueryable();
         }
+
+        public override Request Find(params object[] key)
+        {
+
+            Request request = _context.Request.Find(key);
+
+            _context.Entry(request).Reference(p => p.User).Load();
+
+            return request;
+        }
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GDR.Repository
 {
-    public class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEntity : class
     {
         private bool isDisposed;
         private readonly ContextDb _context;
