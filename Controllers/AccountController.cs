@@ -104,7 +104,7 @@ namespace GDR.Controllers
         }
 
 
-        public ActionResult AccessDenied()
+        public IActionResult AccessDenied()
         {
             return View();
         }

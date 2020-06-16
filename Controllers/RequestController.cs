@@ -20,7 +20,7 @@ namespace GDR.Controllers
         {
             _requestRepository = requestRepository;
         }
-        public ActionResult ViewRequest(String id)
+        public IActionResult ViewRequest(String id)
         {
             Request request = _requestRepository.Find(Guid.Parse(id));
 
@@ -31,7 +31,7 @@ namespace GDR.Controllers
             return View(request);
         }
 
-        public ActionResult EditRequest(String id)
+        public IActionResult EditRequest(String id)
         {
             Request req = _requestRepository.Find(Guid.Parse(id));
 
@@ -48,7 +48,7 @@ namespace GDR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditRequest(RequestViewModel model)
+        public IActionResult EditRequest(RequestViewModel model)
         {
             Request req = _requestRepository.Find(model.Id);
             req.Equipament = model.Equipament;

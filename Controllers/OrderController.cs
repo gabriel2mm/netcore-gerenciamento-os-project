@@ -24,7 +24,7 @@ namespace GDR.Controllers
             _userManager = userManager;
         }
 
-        public ActionResult ViewOrder(string id)
+        public IActionResult ViewOrder(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -45,7 +45,7 @@ namespace GDR.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult> ApproveRequest(string id)
+        public async Task<IActionResult> ApproveRequest(string id)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
             order.Request.Approval = true;
@@ -62,14 +62,14 @@ namespace GDR.Controllers
         }
 
         [HttpGet]
-        public ActionResult RecuseRequest(String id)
+        public IActionResult RecuseRequest(String id)
         {
             return View("RecuseRequest", id);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RecuseRequest(string id, string description)
+        public async Task<IActionResult> RecuseRequest(string id, string description)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
             order.Request.Approval = false;
@@ -86,7 +86,7 @@ namespace GDR.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> SendNextStep(string id, string step, bool permission)
+        public async Task<IActionResult> SendNextStep(string id, string step, bool permission)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
             User user = await _userManager.GetUserAsync(User);
@@ -105,18 +105,18 @@ namespace GDR.Controllers
             _orderRepository.Update(order);
             _orderRepository.SaveAll();
 
-            return RedirectToAction("ViewOrder", "Order", new { id = id });
+            return RedirectToAction("ViewOrder", "Order", id);
         }
 
 
-        public ActionResult UpdateTechnicianOrder(string id)
+        public IActionResult UpdateTechnicianOrder(string id)
         {
             return View("UpdateTechnicianOrder", id);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateTechnicianOrder(string id, string description)
+        public IActionResult UpdateTechnicianOrder(string id, string description)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
             order.Request.TechnicianDescription = description;
@@ -128,14 +128,14 @@ namespace GDR.Controllers
             return RedirectToAction("ViewOrder", new { id = id });
         }
 
-        public ActionResult UpdateSupporteOrder(string id)
+        public IActionResult UpdateSupporteOrder(string id)
         {
             return View("UpdateTechnicianOrder", id);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateSupporteOrder(string id, string description)
+        public IActionResult UpdateSupporteOrder(string id, string description)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
             order.Queue = Enumerators.Queue.Tecnico;
@@ -148,7 +148,7 @@ namespace GDR.Controllers
         }
 
 
-        public ActionResult SchedullingOrder(string id)
+        public IActionResult SchedullingOrder(string id)
         {
             SchedulingViewModel sc = new SchedulingViewModel();
             sc.Id = Guid.Parse(id);
@@ -158,7 +158,7 @@ namespace GDR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SchedullingOrder(SchedulingViewModel model)
+        public IActionResult SchedullingOrder(SchedulingViewModel model)
         {
             if (!ModelState.IsValid)
             {
