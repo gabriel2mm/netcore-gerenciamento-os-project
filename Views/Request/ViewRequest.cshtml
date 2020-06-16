@@ -55,13 +55,28 @@
             @Html.DisplayFor(model => model.TechnicianDescription)
         </div>
 
-        @if (!User.IsInRole("Usuario"))
+
+        @if ((!User.IsInRole("Usuario")) || User.IsInRole("Admin"))
         {
             <div class="form-group">
                 @Html.LabelFor(model => model.DescriptionsSupport):
                 @Html.DisplayFor(model => model.DescriptionsSupport)
             </div>
         }
+
+        @if (Model.Status == GDR.Enumerators.Status.Agendado)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Scheduling)
+                @Html.DisplayFor(model => model.Scheduling)
+            </div>
+        }
+        else
+        {
+            <label>Agendamento: Não agendado</label>
+            <br />
+        }
+
 
         @Html.ActionLink("Voltar", "Index", "Home", null, new { @class = "btn btn-secondary" })
     </div>

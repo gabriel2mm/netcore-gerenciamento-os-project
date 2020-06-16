@@ -27,7 +27,7 @@
                         @Html.ActionLink("Visualizar", "ViewRequest", "Request", new { id = r.Id }, new { @class = "btn btn-primary" })
                         @if (User.IsInRole("Usuario"))
                         {
-                            if (r.Status == GDR.Enumerators.Status.Aberto)
+                            if (r.Status == GDR.Enumerators.Status.Aberto || r.Approval == false)
                             {
                                 @Html.ActionLink("Editar", "EditRequest", "Request", new { id = r.Id }, new { @class = "btn btn-primary" })
                             }

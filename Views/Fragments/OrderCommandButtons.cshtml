@@ -1,0 +1,37 @@
+﻿@if ((User.IsInRole("Admin") || User.IsInRole("Usuario")) && (Model.Queue == GDR.Enumerators.Queue.Requisitante))
+{
+    @Html.ActionLink("Enviar para triagem", "SendNextStep", "Order", new { @id = Model.Id, step = "triagem", permission = User.IsInRole("Admin") || User.IsInRole("Usuario") }, new { @class = "btn btn-outline-dark espace" })
+}
+@if ((User.IsInRole("Admin") || User.IsInRole("Triagem")) && (Model.Queue == GDR.Enumerators.Queue.Triagem))
+{
+    @Html.ActionLink("Encaminhar Para usuário", "SendNextStep", "Order", new { @id = Model.Id, step = "usuario", permission = User.IsInRole("Admin") || User.IsInRole("Triagem") }, new { @class = "btn btn-outline-dark espace" })
+
+    if (Model.Request.isDptoPayment == false)
+    {
+        @Html.ActionLink("Enviar para Pagamento", "SendNextStep", "Order", new { @id = Model.Id, step = "pagamento", permission =  User.IsInRole("Admin") || User.IsInRole("Triagem") }, new { @class = "btn btn-outline-dark espace" })
+    }
+    else if (Model.Request.Approval == true)
+    {
+        @Html.ActionLink("Enviar para técnico", "SendNextStep", "Order", new { @id = Model.Id, step = "tecnico", permission =  User.IsInRole("Admin") || User.IsInRole("Triagem") || User.IsInRole("Nivel 2") }, new { @class = "btn btn-outline-dark espace" })
+    }
+}
+@if ((User.IsInRole("Admin") || User.IsInRole("DPTO Pagamento")) && (Model.Queue == GDR.Enumerators.Queue.DtoPagamento))
+{
+    if (Model.Request.isDptoPayment == false)
+    {
+        @Html.ActionLink("Recusar Solicitação", "RecuseRequest", "Order", new { @id = Model.Id }, new { @class = "btn btn-outline-dark espace" })
+        @Html.ActionLink("Aprovar Solicitação", "ApproveRequest", "Order", new { @id = Model.Id }, new { @class = "btn btn-outline-dark espace" })
+    }
+}
+
+@if ((User.IsInRole("Admin") || User.IsInRole("Tecnico")) && (Model.Queue == GDR.Enumerators.Queue.Tecnico))
+{
+    @Html.ActionLink("Realizar agendamento", "SchedullingOrder", "Order", new { @id = Model.Id }, new { @class = "btn btn-outline-dark espace" })
+    @Html.ActionLink("Encaminhar Para Suporte", "SendNextStep", "Order", new { @id = Model.Id, step = "n2", permission =  User.IsInRole("Admin") || User.IsInRole("Tecnico") }, new { @class = "btn btn-outline-dark espace" })
+    @Html.ActionLink("Complementar", "UpdateTechnicianOrder", "Order", new { @id = Model.Id }, new { @class = "btn btn-outline-dark espace" })
+}
+
+@if ((User.IsInRole("Admin") || User.IsInRole("Nivel 2")) && (Model.Queue == GDR.Enumerators.Queue.nivel2))
+{
+    @Html.ActionLink("Encaminhar para Técnico", "UpdateSupporteOrder", "Order", new { @id = Model.Id }, new { @class = "btn btn-outline-dark espace" })
+}

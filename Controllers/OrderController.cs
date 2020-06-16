@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GDR.Contracts;
+using GDR.Helpers;
 using GDR.Models;
+using GDR.Models.ModelsForViews;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GDR.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Usuario,Admin,Triagem,Nivel 2,Tecnico")]
     public class OrderController : Controller
     {
         protected readonly UserManager<User> _userManager;
@@ -29,7 +31,9 @@ namespace GDR.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            Order order = _orderRepository.Find(Guid.Parse(id));
+            Guid temp;
+            Guid.TryParse(id, out temp);
+            Order order = _orderRepository.Find(temp);
 
             if (order == null)
             {
@@ -38,6 +42,7 @@ namespace GDR.Controllers
 
             return View(order);
         }
+
 
         [HttpGet]
         public async Task<ActionResult> ApproveRequest(string id)
@@ -63,6 +68,7 @@ namespace GDR.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RecuseRequest(string id, string description)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
@@ -80,63 +86,22 @@ namespace GDR.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> SendNextStep(string id, string step)
+        public async Task<ActionResult> SendNextStep(string id, string step, bool permission)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
+            User user = await _userManager.GetUserAsync(User);
+            ChainUsuario chainUsuario = new ChainUsuario();
+            ChainTriagem chainTriagem = new ChainTriagem();
+            ChainPagamento chainPagamento = new ChainPagamento();
+            ChainTecnico chainTecnico = new ChainTecnico();
+            ChainSuporte chainSuporte = new ChainSuporte();
+            ChainCloseOrder chainCloseOrder = new ChainCloseOrder();
 
-            switch (step)
-            {
-                case "usuario":
-                    if (User.IsInRole("Admin") || User.IsInRole("Triagem"))
-                    {
-                        order.Queue = Enumerators.Queue.Requisitante;
-                        order.Request.Status = Enumerators.Status.Atualizado;
-                        order.Request.User = order.User;
-                        order.Request.User = await _userManager.GetUserAsync(User);
-                    }
-                    break;
-                case "triagem":
-                    if (User.IsInRole("Usuario") || User.IsInRole("Admin"))
-                    {
-                        order.Queue = Enumerators.Queue.Triagem;
-                        order.Request.Status = Enumerators.Status.Triagem;
-                    }
-                    break;
-                case "pagamento":
-                    if (User.IsInRole("Admin") || User.IsInRole("Triagem"))
-                    {
-                        order.Queue = Enumerators.Queue.DtoPagamento;
-                        order.Request.Status = Enumerators.Status.DtoPagamentos;
-                        order.Request.User = await _userManager.GetUserAsync(User);
-                    }
-                    break;
-                case "tecnico":
-                    if (User.IsInRole("Admin") || User.IsInRole("Triagem") ||  User.IsInRole("Nivel 2"))
-                    {
-                        order.Queue = Enumerators.Queue.Tecnico;
-                        order.Request.Status = Enumerators.Status.Tecnico;
-                        order.Request.User = await _userManager.GetUserAsync(User);
-                    }
-                    break;
-                case "n2":
-                    if (User.IsInRole("Admin") || User.IsInRole("Tecnico"))
-                    {
-                        order.Queue = Enumerators.Queue.nivel2;
-                        order.Request.Status = Enumerators.Status.Suporte;
-                        order.Request.User = await _userManager.GetUserAsync(User);
-                    }
-                    break;
-                case "fechar":
-                    if (User.IsInRole("Admin") || User.IsInRole("Tecnico"))
-                    {
-                        order.Queue = Enumerators.Queue.Requisitante;
-                        order.Request.Status = Enumerators.Status.Fechado;
-                        order.Request.User = order.User;
-                    }
-                    break;
-                default:
-                    return RedirectToAction("ViewOrder", "Order", new { id = id });
-            }
+            chainUsuario.SetNext(chainTriagem).SetNext(chainPagamento).SetNext(chainTecnico).SetNext(chainSuporte).SetNext(chainCloseOrder);
+            
+            object[] handler = new object[4] { step, permission, order, user };
+            order = chainUsuario.Handle(handler) as Order;
+
             _orderRepository.Update(order);
             _orderRepository.SaveAll();
 
@@ -150,6 +115,7 @@ namespace GDR.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UpdateTechnicianOrder(string id, string description)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
@@ -168,6 +134,7 @@ namespace GDR.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UpdateSupporteOrder(string id, string description)
         {
             Order order = _orderRepository.Find(Guid.Parse(id));
@@ -181,5 +148,31 @@ namespace GDR.Controllers
         }
 
 
+        public ActionResult SchedullingOrder(string id)
+        {
+            SchedulingViewModel sc = new SchedulingViewModel();
+            sc.Id = Guid.Parse(id);
+
+            return View("SchedullingOrder", sc);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SchedullingOrder(SchedulingViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("SchedullingOrder", model.Id);
+            }
+
+            Order order = _orderRepository.Find(model.Id);
+            order.Request.Status = Enumerators.Status.Agendado;
+            order.Request.Scheduling = model.Agendamento;
+
+            _orderRepository.Update(order);
+            _orderRepository.SaveAll();
+
+            return RedirectToAction("ViewOrder", model.Id);
+        }
     }
 }

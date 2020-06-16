@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GDR.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Usuario,Admin,Triagem,Nivel 2,Tecnico")]
     public class RequestController : Controller
     {
 
@@ -54,7 +54,10 @@ namespace GDR.Controllers
             req.Equipament = model.Equipament;
             req.Description = model.Description;
             req.Type = model.Type;
-
+            req.isDptoPayment = false;
+            req.DescriptionDeclineApproval = String.Empty;
+            req.DescriptionsSupport = String.Empty;               
+                
             _requestRepository.Update(req);
             _requestRepository.SaveAll();
 

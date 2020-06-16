@@ -38,9 +38,12 @@ namespace GDR.Repository
         public override Order Find(params object[] key)
         {
             Order order = _context.Order.Find(key);
-            _context.Entry(order).Reference(p => p.User).Load();
-            _context.Entry(order).Reference(p => p.Request).Load();
-
+            if (order != null)
+            {
+                _context.Entry(order).Reference(p => p.User).Load();
+                _context.Entry(order).Reference(p => p.Request).Load();
+            }
+           
             return order;
         }
     }

@@ -13,6 +13,7 @@ namespace GDR.Enumerators
         Triagem = 3,
         DtoPagamentos = 4,
         Suporte = 5,
-        Atualizado = 6
+        Atualizado = 6,
+        Agendado = 7
     }
 }

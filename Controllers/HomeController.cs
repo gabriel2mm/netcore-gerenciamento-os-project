@@ -16,7 +16,7 @@ using GDR.Enumerators;
 
 namespace GDR.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="Usuario,Admin,Triagem,Nivel 2,Tecnico")]
     public class HomeController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -59,7 +59,7 @@ namespace GDR.Controllers
             else if (User.IsInRole("Tecnico"))
             {
                 ViewBag.orders = _orderRepository.Get((o => o.Queue == Queue.Tecnico)).ToList();
-                ViewBag.requests = _requestRepository.Get((r => r.Status == Status.Tecnico)).ToList();
+                ViewBag.requests = _requestRepository.Get((r => r.Status == Status.Tecnico || r.Status == Status.Agendado)).ToList();
             }
 
             return View();

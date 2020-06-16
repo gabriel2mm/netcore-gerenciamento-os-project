@@ -33,5 +33,17 @@ namespace GDR.Models
 
         public String Attachment { get; set; }
 
+
+        public Order Clone()
+        {
+            Order clone = this.MemberwiseClone() as Order;
+            clone.Id = this.Id;
+            clone.Description = this.Description;
+            clone.Queue = this.Queue;
+            clone.Attachment = this.Attachment;
+            clone.Request = this.Request.Clone();
+            clone.User = this.User.Clone();
+            return clone;
+        }
     }
 }

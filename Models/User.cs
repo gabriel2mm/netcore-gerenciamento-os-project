@@ -13,7 +13,7 @@ namespace GDR.Models
     public class User : IdentityUser
     {
         [Column("First_name")]
-        [Display(Name="Nome")]
+        [Display(Name = "Nome")]
         [Required(ErrorMessage = "Este campo é obrogatório")]
         [StringLength(50, ErrorMessage = "First_name só pode conter 50 caractres")]
         public string First_Name { get; set; }
@@ -31,9 +31,36 @@ namespace GDR.Models
         public string Login { get; set; }
 
         [Display(Name = "E-mail")]
-        [Required(ErrorMessage ="Este campo é obrigatório")]
+        [Required(ErrorMessage = "Este campo é obrigatório")]
         [EmailAddress(ErrorMessage = "Informe um E-mail válido")]
-        public override string Email { get => base.Email ; set => base.Email = value; }
+        public override string Email { get => base.Email; set => base.Email = value; }
+
+
+        public User Clone()
+        {
+            User user = this.MemberwiseClone() as User;
+            user.AccessFailedCount = this.AccessFailedCount;
+            user.ConcurrencyStamp = this.ConcurrencyStamp;
+            user.Email = this.Email;
+            user.EmailConfirmed = this.EmailConfirmed;
+            user.First_Name = this.First_Name;
+            user.Last_name = this.Last_name;
+            user.LockoutEnabled = this.LockoutEnabled;
+            user.LockoutEnd = this.LockoutEnd;
+            user.Login = this.Login;
+            user.NormalizedEmail = this.NormalizedEmail;
+            user.NormalizedUserName = this.NormalizedUserName;
+            user.PasswordHash = this.PasswordHash;
+            user.PhoneNumber = this.PhoneNumber;
+            user.PhoneNumberConfirmed = this.PhoneNumberConfirmed;
+            user.SecurityStamp = this.SecurityStamp;
+            user.TwoFactorEnabled = this.TwoFactorEnabled;
+            user.UserName = this.UserName;
+
+            return user;
+        }
+
+
 
     }
 }

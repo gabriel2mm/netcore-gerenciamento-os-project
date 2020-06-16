@@ -22,7 +22,7 @@
                     <td>@o.User.First_Name @o.User.Last_name</td>
                     <td>@o.Queue</td>
                     <td>@o.Request.Status</td>
-                    <td>@(o.Request.Approval == false ?  "Recusado" : "Aprovado")</td>
+                    <td>@( o.Request.isDptoPayment == false ? "Pendente" : o.Request.isDptoPayment == false && o.Request.Approval == false ? "Recusado" : "Aprovado")</td>
                     <td class="text-center justify-content-center">
                         @Html.ActionLink("Visualizar", "ViewOrder", "Order", new { @id = o.Id }, new { @class = "btn btn-primary" })
                     </td>

@@ -59,6 +59,27 @@ namespace GDR.Models
         public String TechnicianDescription { get; set; }
 
         [Column("Scheduling")]
+        [Display(Name = "Data de agendamento")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
         public DateTime Scheduling { get; set; }
+
+
+        public Request Clone(){
+            Request request = this.MemberwiseClone() as Request;
+            request.Id = this.Id;
+            request.Equipament = this.Equipament;
+            request.isDptoPayment = this.isDptoPayment;
+            request.Scheduling = this.Scheduling;
+            request.Status = this.Status;
+            request.TechnicianDescription = this.TechnicianDescription;
+            request.Type = this.Type;
+            request.User = this.User.Clone();
+            request.Approval = this.Approval;
+            request.Description = this.Description;
+            request.DescriptionDeclineApproval = this.DescriptionDeclineApproval;
+            request.DescriptionsSupport =this.DescriptionsSupport;
+
+            return request;
+        }        
     }
 }
